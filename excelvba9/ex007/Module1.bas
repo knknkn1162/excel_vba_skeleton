@@ -12,5 +12,5 @@ Sub main()
     Next
     Cells(row + 1, 4) = sum
     
-    MsgBox sum & ", " & sum / (row - 1)
+    MsgBox sum & vbLf & sum / (row - 1), vbOKOnly, "Œ‹‰Ê"
 End Sub
