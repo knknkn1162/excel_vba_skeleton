@@ -1,8 +1,6 @@
 XLSMS=$(filter-out $(wildcard */~*.xlsm), $(wildcard excelvba9/*.xlsm))
 TARGETS=$(basename $(XLSMS))
 
-test:
-	@echo $(TARGETS)
 all: $(TARGETS)
 
 %: %.xlsm
