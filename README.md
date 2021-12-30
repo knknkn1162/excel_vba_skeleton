@@ -2,7 +2,8 @@
 
 ```sh
 make
-# or force build
+make COMMIT_MSG="update"
+# or
 make -B ./excelvba9/ex001
 ```
 
