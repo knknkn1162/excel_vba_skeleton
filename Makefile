@@ -10,13 +10,15 @@ push:
 
 commit: $(TARGETS)
 
-print-%: ; @echo $* = $($*)
+print-%:
+	@echo $* = $($*)
 
 %: %.xlsm
+	$(RM) -r $@
 	@echo "build $^"
 	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor -- /code/$^
 	git add $@
 	-git commit -m "impl $@"
 
 clean:
-	find ./excelvba9 -maxdepth 1 -mindepth 1 -type d -exec rm -rf '{}' \;
+	$(RM) -r $(TARGETS)
