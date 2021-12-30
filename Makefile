@@ -1,4 +1,9 @@
-XLSMS=$(filter-out $(wildcard */~*.xlsm), $(wildcard excelvba9/*.xlsm))
+DIRS=excelvba9 \
+	 excelvba1
+
+XLSMS=$(filter-out $(wildcard */~*.xlsm), \
+	  $(foreach dir, $(DIRS), $(wildcard $(dir)/*.xlsm)) \
+)
 TARGETS=$(basename $(XLSMS))
 COMMIT_MSG=implement
 
