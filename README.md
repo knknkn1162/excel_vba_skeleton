@@ -1,7 +1,9 @@
 # README
 
 ```sh
-make ./excelvba9/ex001
+make
+# or force build
+make -B ./excelvba9/ex001
 ```
 
 ## excelvba9
