@@ -1,7 +1,7 @@
 # README
 
 ```sh
-make <.xlsm file>
+make ./excelvba9/ex001
 ```
 
 ## excelvba9
