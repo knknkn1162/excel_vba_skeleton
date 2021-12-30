@@ -1,8 +1,14 @@
 XLSMS=$(filter-out $(wildcard */~*.xlsm), $(wildcard excelvba9/*.xlsm))
 TARGETS=$(basename $(XLSMS))
 
-.PHONY: all clean
-all: $(TARGETS)
+.PHONY: all push commit clean
+
+all: commit push
+
+push:
+	git push
+
+commit: $(TARGETS)
 
 print-%: ; @echo $* = $($*)
 
