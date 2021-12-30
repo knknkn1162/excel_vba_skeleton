@@ -9,6 +9,7 @@ Sub init()
             Exit For
         End If
     Next ws
+    Application.DisplayAlerts = True
 End Sub
 
 Sub main()
