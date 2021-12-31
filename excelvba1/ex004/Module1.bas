@@ -5,16 +5,11 @@ Sub init()
 End Sub
 
 Sub main()
-    With Range("B2:C2")
-        .Merge
-        .HorizontalAlignment = xlCenter
-    End With
+    Range("B2:C2").Merge
+    Range("D2:E2").Merge
     
-    With Range("D2:E2")
-        .Merge
-        .HorizontalAlignment = xlCenter
-    End With
     With Range("B2:E3")
+        .HorizontalAlignment = xlCenter
         .Interior.Color = vbBlue
         .Font.Color = vbWhite
     End With
