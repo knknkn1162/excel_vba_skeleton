@@ -20,7 +20,7 @@ Sub main()
         .Cells(1, 3) = "数量"
         .Cells(1, 4) = "単価"
     End With
-    
+      
     Worksheets("練習22").Activate
     Dim pos As Integer
     pos = 2
