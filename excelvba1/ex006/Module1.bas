@@ -3,6 +3,7 @@ Option Explicit
 Sub main()
     With Worksheets("Sheet1")
         '.Range("B2") = "日付(" & Left(Range("a1"), 4) & "/" & Mid(Range("a1"), 5, 2) & "/" & Mid(Range("a1"), 7) & ")"
+        ' Without "'",the result is "2012/2/3"
         .Range("B2") = Format(Range("a1"), "'0000/00/00")
     End With
     
