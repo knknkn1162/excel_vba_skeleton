@@ -7,6 +7,6 @@ make COMMIT_MSG="update"
 make -B ./excelvba9/ex001
 ```
 
-## excelvba9
+## excelvba1, excelvba9
 
-See https://excel-ubara.com/excelvba9/
+See https://excel-ubara.com
