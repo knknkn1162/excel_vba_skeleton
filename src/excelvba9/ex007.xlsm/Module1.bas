@@ -12,4 +12,4 @@ Sub main()
     Next
     Cells(row + 1, 4) = sum
     MsgBox sum & vbLf & sum / (row - 1), vbOKOnly, "結果"
-End Sub
+End Sub   
