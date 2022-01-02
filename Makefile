@@ -22,7 +22,7 @@ print-%:
 %: %.xlsm
 	$(RM) -r $@
 	@echo "build $^"
-	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor -- /code/$^
+	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor /code/$^ --dst_dir /code/src/$^
 	git add $@
 	-git commit -m "$(COMMIT_MSG) $@"
 
