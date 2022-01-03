@@ -24,7 +24,7 @@ print-%:
 	$(RM) -r $@
 	@echo "build $^"
 	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor /code/$^ --dst_dir /code/${SRC_ROOT_DIR}/$^
-	git add $@
+	git add ${SRC_ROOT_DIR}/$^
 	-git commit -m "$(COMMIT_MSG) $@"
 
 ifeq ("$(OS)", "Windows_NT")
@@ -49,4 +49,4 @@ endif
 	
 
 clean:
-	$(RM) -r $(TARGETS)
+	$(RM) -r ${SRC_ROOT_DIR}
