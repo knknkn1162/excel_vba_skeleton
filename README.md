@@ -1,7 +1,35 @@
 # README
 
+Easy handling Excel VBA project.
+
+## OS features
+
+||windows|MacOS|
+|---|---|---|
+|export|o|o|
+|import|o|x|
+|dispose macro(in workbook)|o|x|
+|run macro|o|x|
+
+## how to run excel macro
+
+1. Download xlsm books in https://github.com/knknkn1162/excel_vba_playground/releases which contain VBA macro.
+
+2. type commands below;
+
 ```sh
-make
+unzip excelvba8.zip
+# import macro
+make import
+make run
+```
+
+3. If you edit macro source, export it to text format automatically!
+
+```sh
+make export dispose
+make commit push
+#or
 make COMMIT_MSG="update"
 # or
 make -B ./excelvba9/ex001
@@ -24,7 +52,3 @@ make -B ./excelvba9/ex001
     ├── Sheet9.bas
     └── ThisWorkbook.bas
 ```
-
-## excelvba1, excelvba9
-
-See https://excel-ubara.com
