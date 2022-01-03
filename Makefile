@@ -5,7 +5,7 @@ XLSMS=$(filter-out $(wildcard */~*.xlsm), \
 	  $(foreach dir, $(DIRS), $(wildcard $(dir)/*.xlsm)) \
 )
 TARGETS=$(basename $(XLSMS))
-SRC_ROOT_DIR=./src
+SRC_ROOT_DIR=src
 COMMIT_MSG=implement
 
 .PHONY: all push commit imoprt export clean
@@ -36,8 +36,8 @@ endif
 
 import-%: %/
 	cscript ./vbac/vbac.wsf combine /source:${SRC_ROOT_DIR}/$^ /binary:$^
-export-%: $(DO_STUFF) %/
-	cscript ./vbac/vbac.wsf decombine /source:${SRC_ROOT_DIR}/$^ /binary:$^
+export-%: %/ $(DO_STUFF)
+	cscript ./vbac/vbac.wsf decombine /source:${SRC_ROOT_DIR}/$< /binary:$<
 import: $(addprefix import-, $(DIRS))
 export: $(addprefix export-, $(DIRS))
 else
