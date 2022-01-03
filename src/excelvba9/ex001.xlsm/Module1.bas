@@ -7,7 +7,7 @@ Sub init()
     Next
 End Sub
 
-Sub ex1()
+Sub main()
     Dim i As Integer
     For i = 2 To Cells(Rows.Count, 1).End(xlUp).Row
         Cells(i, 4) = Cells(i, 2) * Cells(i, 3)
