@@ -34,19 +34,20 @@ ifeq (,$(wildcard ${SRC_ROOT_DIR}/))
 DO_STUFF=create-src-root-dir
 endif
 
-import-%: %/
+import-%: %
 	cscript ./vbac/vbac.wsf combine /source:${SRC_ROOT_DIR}/$^ /binary:$^
-export-%: %/ $(DO_STUFF)
+export-%: % $(DO_STUFF)
 	cscript ./vbac/vbac.wsf decombine /source:${SRC_ROOT_DIR}/$< /binary:$<
+	nkf -Lu --overwrite ${SRC_ROOT_DIR}/$</*/*
 import: $(addprefix import-, $(DIRS))
 export: $(addprefix export-, $(DIRS))
+clean:
+	Remove-Item -Recurse -Force ./${SRC_ROOT_DIR}
 else
 import:
 	$(error "import command is not implemented")	
 export:
 	$(error "import command is not implemented")
-endif
-	
-
 clean:
 	$(RM) -r ${SRC_ROOT_DIR}
+endif

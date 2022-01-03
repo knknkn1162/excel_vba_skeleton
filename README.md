@@ -11,6 +11,20 @@ Easy handling Excel VBA project.
 |dispose macro(in workbook)|o|x|
 |run macro|o|x|
 
+## Prerequisites
+
+### windows
+
++ install docker, nkf
+
+```ps
+# install nkf in Admin
+Start-Process powershell -Verb runAs
+choco install docker-for-windows
+choco source add -n kai2nenobu -s https://www.myget.org/F/kai2nenobu
+choco install -y nkf
+```
+
 ## how to run excel macro
 
 1. Download xlsm books in https://github.com/knknkn1162/excel_vba_playground/releases which contain VBA macro.
