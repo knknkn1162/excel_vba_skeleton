@@ -2,6 +2,8 @@
 
 Easy handling Excel VBA project.
 
++ [x] support Japanese code
+
 ## OS features
 
 ||windows|MacOS|
@@ -27,26 +29,24 @@ choco install -y nkf
 
 ## how to run excel macro
 
+0. Fetch this repo; `git clone https://github.com/knknkn1162/excel_vba_playground`
+
 1. Download xlsm books in https://github.com/knknkn1162/excel_vba_playground/releases which contain VBA macro.
 
-2. type commands below;
+2. Type commands below;
 
 ```sh
 unzip excelvba8.zip
 # import macro
 make import
+# TODO: under development
 make run
 ```
 
 3. If you edit macro source, export it to text format automatically!
 
 ```sh
-make export dispose
-make commit push
-#or
-make COMMIT_MSG="update"
-# or
-make -B ./excelvba9/ex001
+make export
 ```
 
 ## directories
