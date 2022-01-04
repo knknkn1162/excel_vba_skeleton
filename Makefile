@@ -36,13 +36,15 @@ endif
 
 import-%: %
 	cscript ./vbac/vbac.wsf combine /source:${SRC_ROOT_DIR}/$^ /binary:$^
+
+# Shift_JIS -> UTF-8, CRLF -> LU
 export-%: % $(DO_STUFF)
 	cscript ./vbac/vbac.wsf decombine /source:${SRC_ROOT_DIR}/$< /binary:$<
-	nkf -Lu --overwrite ${SRC_ROOT_DIR}/$</*/*
+	nkf -S -w -Lu --overwrite ${SRC_ROOT_DIR}/$</*/*
 import: $(addprefix import-, $(DIRS))
 export: $(addprefix export-, $(DIRS))
 clean:
-	Remove-Item -Recurse -Force ./${SRC_ROOT_DIR}
+	cmd /c rd /s /q ${SRC_ROOT_DIR}
 else
 import:
 	$(error "import command is not implemented")	
