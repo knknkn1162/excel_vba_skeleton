@@ -42,7 +42,7 @@ import-%: % copy-import-dir
 # Shift_JIS -> UTF-8, CRLF -> LU
 export-%: % $(DO_STUFF)
 	cscript ./vbac/vbac.wsf decombine /source:${SRC_ROOT_DIR}/$< /binary:$<
-	nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite ${SRC_ROOT_DIR}/$</*/*
+	wsl find ${SRC_ROOT_DIR}/$< -type f -exec nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite {} \;
 import: $(addprefix import-, $(DIRS))
 export: $(addprefix export-, $(DIRS)) clean-$(SRC_IMPORT_ROOT_DIR)
 
