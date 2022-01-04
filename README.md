@@ -10,7 +10,7 @@ Easy handling Excel VBA project.
 |---|---|---|
 |export|o|o|
 |import|o|x|
-|dispose macro(in workbook)|o|x|
+|unbind macro|o|x|
 |run macro|o|x|
 
 ## Prerequisites
@@ -49,6 +49,8 @@ make run
 make export
 ```
 
+Note) If you clean macro source in your .xlsm, try `make unbind`:
+
 ## directories
 
 ```bash
@@ -57,12 +59,7 @@ make export
 └── ex007.xlsm
 ./src/excelvba1
 ├── ex001.xlsm
-│   ├── Module1.bas
-│   ├── Sheet1.bas
-│   └── ThisWorkbook.bas
+│   └─ Module1.bas
 └── ex007.xlsm
-    ├── Module1.bas
-    ├── Sheet1.bas
-    ├── Sheet9.bas
-    └── ThisWorkbook.bas
+    └── Module1.bas
 ```
