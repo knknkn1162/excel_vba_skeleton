@@ -31,7 +31,7 @@ choco install -y nkf
 
 0. Fetch this repo; `git clone https://github.com/knknkn1162/excel_vba_playground`
 
-1. Download xlsm books in https://github.com/knknkn1162/excel_vba_playground/releases which contain VBA macro.
+1. Download xlsm books in https://github.com/knknkn1162/excel_vba_playground/releases not containing VBA macro.
 
 2. Type commands below;
 
