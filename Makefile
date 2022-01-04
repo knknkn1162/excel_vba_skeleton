@@ -9,7 +9,7 @@ SRC_ROOT_DIR=src
 # used for nkf command
 VBA_ENCODING=Shift_JIS
 THIS_ENCODING=UTF-8
-SRC_IMPORT_ROOT_DIR=${SRC_ROOT_DIR}/tmp_${VBA_ENCODING}
+SRC_IMPORT_ROOT_DIR=${SRC_ROOT_DIR}_${VBA_ENCODING}
 COMMIT_MSG=implement
 
 .PHONY: all imoprt export clean
@@ -24,25 +24,28 @@ ifeq (,$(wildcard ${SRC_ROOT_DIR}/))
 DO_STUFF=create-src-root-dir
 endif
 .PHONY: create-src-root-dir copy-import-dir
+clean-${SRC_IMPORT_ROOT_DIR}:
+	if ( Test-Path ${SRC_IMPORT_ROOT_DIR} ) { ${RM} ${SRC_IMPORT_ROOT_DIR} }
+clean: clean-$(SRC_IMPORT_ROOT_DIR)
+	if ( Test-Path $(SRC_ROOT_DIR) ) { ${RM} $(SRC_ROOT_DIR) }
 create-src-root-dir:
 	mkdir ${SRC_ROOT_DIR}
-copy-import-dir:
+copy-import-dir: clean-${SRC_IMPORT_ROOT_DIR}
 	cp -r ${SRC_ROOT_DIR} ${SRC_IMPORT_ROOT_DIR}
 
 # UTF-8 -> Shift_JIS and combine
-import-%: %
-	nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite ${SRC_IMPORT_ROOT_DIR}/$</*/*
-	cscript ./vbac/vbac.wsf combine /source:${SRC_IMPORT_ROOT_DIR}/$^ /binary:$^
+import-%: % copy-import-dir
+	# TODO: implement to be independent of wsl
+	wsl find ${SRC_IMPORT_ROOT_DIR}/$< -type f -exec nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite {} \;
+	cscript ./vbac/vbac.wsf combine /source:${SRC_IMPORT_ROOT_DIR}/$< /binary:$<
 
 # Shift_JIS -> UTF-8, CRLF -> LU
 export-%: % $(DO_STUFF)
 	cscript ./vbac/vbac.wsf decombine /source:${SRC_ROOT_DIR}/$< /binary:$<
 	nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite ${SRC_ROOT_DIR}/$</*/*
-import: copy-import-dir $(addprefix import-, $(DIRS))
-export: $(addprefix export-, $(DIRS))
-	if ( Test-Path ${SRC_IMPORT_ROOT_DIR} ) { ${RM} ${SRC_IMPORT_ROOT_DIR} }
-clean:
-	if ( Test-Path ${SRC_ROOT_DIR} ) { ${RM} ${SRC_ROOT_DIR} }
+import: $(addprefix import-, $(DIRS))
+export: $(addprefix export-, $(DIRS)) clean-$(SRC_IMPORT_ROOT_DIR)
+
 else
 RM=rm -rf
 import:
@@ -52,5 +55,5 @@ export: $(TARGETS)
 	${RM} $@
 	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor /code/$^ --dst_dir /code/${SRC_ROOT_DIR}/$^
 clean:
-	${RM} ${SRC_ROOT_DIR}
+	${RM} ${SRC_ROOT_DIR} ${SRC_IMPORT_ROOT_DIR}
 endif
