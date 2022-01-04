@@ -24,27 +24,32 @@ ifeq (,$(wildcard ${SRC_ROOT_DIR}/))
 DO_STUFF=create-src-root-dir
 endif
 .PHONY: create-src-root-dir copy-import-dir
-clean-${SRC_IMPORT_ROOT_DIR}:
-	if ( Test-Path ${SRC_IMPORT_ROOT_DIR} ) { ${RM} ${SRC_IMPORT_ROOT_DIR} }
+clean-$(SRC_IMPORT_ROOT_DIR):
+	if ( Test-Path $(SRC_IMPORT_ROOT_DIR) ) { ${RM} $(SRC_IMPORT_ROOT_DIR) }
 clean: clean-$(SRC_IMPORT_ROOT_DIR)
 	if ( Test-Path $(SRC_ROOT_DIR) ) { ${RM} $(SRC_ROOT_DIR) }
 create-src-root-dir:
-	mkdir ${SRC_ROOT_DIR}
+	mkdir $(SRC_ROOT_DIR)
 copy-import-dir: clean-${SRC_IMPORT_ROOT_DIR}
-	cp -r ${SRC_ROOT_DIR} ${SRC_IMPORT_ROOT_DIR}
+	cp -r $(SRC_ROOT_DIR) ${SRC_IMPORT_ROOT_DIR}
 
-# UTF-8 -> Shift_JIS and combine
+
 import-%: % copy-import-dir
-	# TODO: implement to be independent of wsl
-	wsl find ${SRC_IMPORT_ROOT_DIR}/$< -type f -exec nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite {} \;
+	# UTF-8 -> Shift_JIS and combine
+	Get-ChildItem -Recurse -Attributes !Directory $(SRC_IMPORT_ROOT_DIR)/$< | %{ nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite $$_.FullName }
 	cscript ./vbac/vbac.wsf combine /source:${SRC_IMPORT_ROOT_DIR}/$< /binary:$<
 
-# Shift_JIS -> UTF-8, CRLF -> LU
-export-%: % $(DO_STUFF)
+export-%: % $(DO_STUFF) clean-$(SRC_IMPORT_ROOT_DIR)
 	cscript ./vbac/vbac.wsf decombine /source:${SRC_ROOT_DIR}/$< /binary:$<
-	wsl find ${SRC_ROOT_DIR}/$< -type f -exec nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite {} \;
+	# Shift_JIS -> UTF-8, CRLF -> LU
+	Get-ChildItem -Recurse -Attributes !Directory $(SRC_ROOT_DIR)/$< | %{ nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite $$_.FullName }
+
 import: $(addprefix import-, $(DIRS))
-export: $(addprefix export-, $(DIRS)) clean-$(SRC_IMPORT_ROOT_DIR)
+export: $(addprefix export-, $(DIRS))
+
+unbind-%: %
+	cscript ./vbac/vbac.wsf clear /binary:$<
+unbind: $(addprefix unbind-, $(DIRS))
 
 else
 RM=rm -rf
