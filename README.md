@@ -6,12 +6,12 @@ Easy handling Excel VBA project.
 
 ## OS features
 
-||windows|MacOS|
-|---|---|---|
-|export|o|o|
-|import|o|x|
-|unbind macro|o|x|
-|run macro|o|x|
+||windows|MacOS|other|
+|---|---|---|---|
+|export|o|o|o|
+|import|o|x|x|
+|unbind macro|o|x|x|
+|run macro|o|o|x|
 
 ## Prerequisites
 
