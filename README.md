@@ -39,8 +39,10 @@ choco install -y nkf
 unzip excelvba8.zip
 # import macro
 make import
-# TODO: under development
-make run
+# make run-<dir>-<.xlsm file>
+make run-vba100-ex001.xlsm
+# run macros in directory
+make run-vba100 # or make run
 ```
 
 3. If you edit macro source, export it to text format automatically!

@@ -13,10 +13,28 @@ THIS_ENCODING=UTF-8
 SRC_IMPORT_ROOT_DIR=$(SRC_ROOT_DIR)_$(VBA_ENCODING)
 COMMIT_MSG=implement
 
+# define macro
+ifeq ("$(OS)", "Windows_NT")
+
+define define-run-commands
+run-$(1)-%: $(1)/%
+	cscript ./vbac/vbac.wsf run /target:$$^
+run-$(1): $(1) $(addprefix run-$(1)-, $(notdir $(wildcard $(1)/*.xlsm)))
+endef
+
+else
+endif
+
+# common commands
+
 .PHONY: all imoprt export clean
-
 all: export
+## run commands
+$(foreach dir, $(DIRS), \
+$(eval $(call define-run-commands,$(dir))) \
+)
 
+# OS dep. commands
 ifeq ("$(OS)", "Windows_NT")
 SHELL:=powershell.exe
 .SHELLFLAGS:= -NoProfile -Command
@@ -33,7 +51,6 @@ create-src-root-dir:
 	mkdir $(SRC_ROOT_DIR)
 copy-import-dir: clean-$(SRC_IMPORT_ROOT_DIR)
 	cp -r $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
-
 
 import-%: % copy-import-dir
 	# UTF-8 -> Shift_JIS and combine
