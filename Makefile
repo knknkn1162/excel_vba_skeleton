@@ -69,10 +69,21 @@ unbind-%: %
 	cscript ./vbac/vbac.wsf clear /binary:$<
 unbind: $(addprefix unbind-, $(DIRS))
 
+# macOS or linux
 else
+
 RM=rm -rf
+# Mac OS only
+ifeq ("$(shell uname)", "Darwin")
+run:
+	./scripts/run_macro.scpt $(abspath $(XLSM))
+else
+run:
+	$(error "run command is not implemented")
+endif
 import:
-	$(error "import command is not implemented")	
+	$(error "import command is not implemented")
+
 export: $(TARGETS)
 %: %.xlsm
 	$(RM) $@
