@@ -1,5 +1,6 @@
 DIRS=excelvba9 \
-	 excelvba1
+	 excelvba1 \
+	 vba100
 
 XLSMS=$(filter-out $(wildcard */~*.xlsm), \
 	  $(foreach dir, $(DIRS), $(wildcard $(dir)/*.xlsm)) \
