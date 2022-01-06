@@ -12,13 +12,14 @@ VBA_ENCODING=Shift_JIS
 THIS_ENCODING=UTF-8
 SRC_IMPORT_ROOT_DIR=$(SRC_ROOT_DIR)_$(VBA_ENCODING)
 COMMIT_MSG=implement
+VBAC_EXE=$(abspath ./vbac/vbac.wsf)
 
 # define macro
 ifeq ("$(OS)", "Windows_NT")
 
 define define-run-commands
 run-$(1)-%: $(1)/%
-	cscript ./vbac/vbac.wsf run /target:$$^
+	cscript $(VBAC_EXE) run /target:$$^
 run-$(1): $(1) $(addprefix run-$(1)-, $(notdir $(wildcard $(1)/*.xlsm)))
 endef
 
@@ -43,31 +44,32 @@ ifeq (,$(wildcard $(SRC_ROOT_DIR)/))
 DO_STUFF=create-src-root-dir
 endif
 .PHONY: create-src-root-dir copy-import-dir
-clean-$(SRC_IMPORT_ROOT_DIR):
-	if ( Test-Path $(SRC_IMPORT_ROOT_DIR) ) { ${RM} $(SRC_IMPORT_ROOT_DIR) }
 clean: clean-$(SRC_IMPORT_ROOT_DIR)
 	if ( Test-Path $(SRC_ROOT_DIR) ) { ${RM} $(SRC_ROOT_DIR) }
+clean-$(SRC_IMPORT_ROOT_DIR):
+	if ( Test-Path $(SRC_IMPORT_ROOT_DIR) ) { ${RM} $(SRC_IMPORT_ROOT_DIR) }
 create-src-root-dir:
 	mkdir $(SRC_ROOT_DIR)
 copy-import-dir: clean-$(SRC_IMPORT_ROOT_DIR)
 	cp -r $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
 
+
+import-all: $(addprefix import-, $(DIRS))
 import-%: % copy-import-dir
 	# UTF-8 -> Shift_JIS and combine
 	Get-ChildItem -Recurse -Attributes !Directory $(SRC_IMPORT_ROOT_DIR)/$< | %{ nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite $$_.FullName }
-	cscript ./vbac/vbac.wsf combine /source:$(SRC_IMPORT_ROOT_DIR)/$< /binary:$<
+	cscript $(VBAC_EXE) combine /source:$(SRC_IMPORT_ROOT_DIR)/$< /binary:$<
 
+
+export-all: $(addprefix export-, $(DIRS))
 export-%: % $(DO_STUFF) clean-$(SRC_IMPORT_ROOT_DIR)
-	cscript ./vbac/vbac.wsf decombine /source:$(SRC_ROOT_DIR)/$< /binary:$<
+	cscript $(VBAC_EXE) decombine /source:$(SRC_ROOT_DIR)/$< /binary:$<
 	# Shift_JIS -> UTF-8, CRLF -> LU
 	Get-ChildItem -Recurse -Attributes !Directory $(SRC_ROOT_DIR)/$< | %{ nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite $$_.FullName }
 
-import: $(addprefix import-, $(DIRS))
-export: $(addprefix export-, $(DIRS))
-
 unbind-%: %
-	cscript ./vbac/vbac.wsf clear /binary:$<
-unbind: $(addprefix unbind-, $(DIRS))
+	cscript $(VBAC_EXE) clear /binary:$<
+unbind-all: $(addprefix unbind-, $(DIRS))
 
 # macOS or linux
 else
