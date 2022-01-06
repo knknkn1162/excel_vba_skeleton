@@ -19,7 +19,7 @@ ifeq ("$(OS)", "Windows_NT")
 
 define define-run-commands
 run-$(1)-%: $(1)/%
-	cscript $(VBAC_EXE) run /target:$$^
+	make run XLSM=$$^
 run-$(1): $(1) $(addprefix run-$(1)-, $(notdir $(wildcard $(1)/*.xlsm)))
 endef
 
@@ -70,6 +70,9 @@ export-%: % $(DO_STUFF) clean-$(SRC_IMPORT_ROOT_DIR)
 unbind-%: %
 	cscript $(VBAC_EXE) clear /binary:$<
 unbind-all: $(addprefix unbind-, $(DIRS))
+
+run:
+	cscript $(VBAC_EXE) run /target:$(abspath $(XLSM))
 
 # macOS or linux
 else
