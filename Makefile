@@ -86,7 +86,7 @@ import: copy-import-dir
 	cscript $(VBAC_EXE) combine /source:$(SRC_IMPORT_ROOT_DIR)/$(XLSM_PARENT_DIR) /binary:$(XLSM_ABSPATH)
 
 unbind:
-	cscript $(VBAC_EXE) clear /binary:$(abspath $(XLSM))
+	cscript $(VBAC_EXE) clear /binary:$(XLSM_ABSPATH)
 
 
 # macOS or linux
@@ -96,7 +96,7 @@ RM=rm -rf
 # Mac OS only
 ifeq ("$(shell uname)", "Darwin")
 run:
-	./scripts/run_macro.scpt $(abspath $(XLSM))
+	./scripts/run_macro.scpt $(XLSM_ABSPATH)
 else
 run:
 	$(error "run command is not implemented")
@@ -104,10 +104,10 @@ endif
 import:
 	$(error "import command is not implemented")
 
-export: $(TARGETS)
-%: %.xlsm
-	$(RM) $@
-	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor /code/$^ --dst_dir /code/$(SRC_ROOT_DIR)/$^
+export:
+	$(RM) $(SRC_ROOT_DIR)/$(XLSM_RELPATH)
+	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor /code/$(XLSM_RELPATH) --dst_dir /code/$(SRC_ROOT_DIR)/$(XLSM_RELPATH)
+
 clean:
 	$(RM) $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
 endif
