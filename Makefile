@@ -41,7 +41,6 @@ SHELL:=powershell.exe
 .SHELLFLAGS:= -NoProfile -Command
 RM=rm -r -fo
 ifeq (,$(wildcard $(SRC_ROOT_DIR)/))
-DO_STUFF=create-src-root-dir
 endif
 .PHONY: create-src-root-dir copy-import-dir
 clean: clean-$(SRC_IMPORT_ROOT_DIR)
@@ -49,7 +48,7 @@ clean: clean-$(SRC_IMPORT_ROOT_DIR)
 clean-$(SRC_IMPORT_ROOT_DIR):
 	if ( Test-Path $(SRC_IMPORT_ROOT_DIR) ) { ${RM} $(SRC_IMPORT_ROOT_DIR) }
 create-src-root-dir:
-	mkdir $(SRC_ROOT_DIR)
+	if ( -not (Test-Path $(SRC_ROOT_DIR)) ) { mkdir $(SRC_ROOT_DIR) }
 copy-import-dir: clean-$(SRC_IMPORT_ROOT_DIR)
 	cp -r $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
 
@@ -62,7 +61,7 @@ import-%: % copy-import-dir
 
 
 export-all: $(addprefix export-, $(DIRS))
-export-%: % $(DO_STUFF) clean-$(SRC_IMPORT_ROOT_DIR)
+export-%: % create-src-root-dir clean-$(SRC_IMPORT_ROOT_DIR)
 	cscript $(VBAC_EXE) decombine /source:$(SRC_ROOT_DIR)/$< /binary:$<
 	# Shift_JIS -> UTF-8, CRLF -> LU
 	Get-ChildItem -Recurse -Attributes !Directory $(SRC_ROOT_DIR)/$< | %{ nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite $$_.FullName }
@@ -71,8 +70,23 @@ unbind-%: %
 	cscript $(VBAC_EXE) clear /binary:$<
 unbind-all: $(addprefix unbind-, $(DIRS))
 
+XLSM_ABSPATH=$(abspath $(XLSM))
+XLSM_NAME=$(notdir $(XLSM))
+XLSM_PARENT_DIR=$(lastword $(subst /, ,$(dir $(abspath $(XLSM)))))
+XLSM_RELPATH=$(XLSM_PARENT_DIR)/$(XLSM_NAME)
+
 run:
-	cscript $(VBAC_EXE) run /target:$(abspath $(XLSM))
+	cscript $(VBAC_EXE) run /binary:$(abspath $(XLSM))
+
+export: create-src-root-dir clean-$(SRC_IMPORT_ROOT_DIR)
+	if (-not ( Test-Path $(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) )) { mkdir $(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) }
+	cscript $(VBAC_EXE) decombine /source:$(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) /binary:$(XLSM_ABSPATH)
+	Get-ChildItem -Recurse -Attributes !Directory $(SRC_ROOT_DIR)/$(XLSM_RELPATH)  | %{ nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite $$_.FullName }
+
+import: copy-import-dir
+	Get-ChildItem -Recurse -Attributes !Directory $(SRC_IMPORT_ROOT_DIR)/$(XLSM_RELPATH)  | %{ nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite $$_.FullName }
+	cscript $(VBAC_EXE) combine /source:$(SRC_IMPORT_ROOT_DIR)/$(XLSM_PARENT_DIR) /binary:$(XLSM_ABSPATH)
+
 
 # macOS or linux
 else
