@@ -14,13 +14,18 @@ SRC_IMPORT_ROOT_DIR=$(SRC_ROOT_DIR)_$(VBA_ENCODING)
 COMMIT_MSG=implement
 VBAC_EXE=$(abspath ./vbac/vbac.wsf)
 
+XLSM_ABSPATH=$(abspath $(XLSM))
+XLSM_NAME=$(notdir $(XLSM))
+XLSM_PARENT_DIR=$(lastword $(subst /, ,$(dir $(abspath $(XLSM)))))
+XLSM_RELPATH=$(XLSM_PARENT_DIR)/$(XLSM_NAME)
+
 # define macro
 ifeq ("$(OS)", "Windows_NT")
 
-define define-run-commands
-run-$(1)-%: $(1)/%
-	make run XLSM=$$^
-run-$(1): $(1) $(addprefix run-$(1)-, $(notdir $(wildcard $(1)/*.xlsm)))
+define define-vbac-commands
+$(2)-$(1)-%: $(1)/%
+	make $(2) XLSM=$$^
+$(2)-$(1): $(1) $(addprefix $(2)-$(1)-, $(notdir $(wildcard $(1)/*.xlsm)))
 endef
 
 else
@@ -32,8 +37,24 @@ endif
 all: export
 ## run commands
 $(foreach dir, $(DIRS), \
-$(eval $(call define-run-commands,$(dir))) \
+$(eval $(call define-vbac-commands,$(dir), run)) \
 )
+
+## import commands
+$(foreach dir, $(DIRS), \
+$(eval $(call define-vbac-commands,$(dir), import)) \
+)
+
+## export commands
+$(foreach dir, $(DIRS), \
+$(eval $(call define-vbac-commands,$(dir), export)) \
+)
+
+## unbind commands
+$(foreach dir, $(DIRS), \
+$(eval $(call define-vbac-commands,$(dir), unbind)) \
+)
+
 
 # OS dep. commands
 ifeq ("$(OS)", "Windows_NT")
@@ -52,29 +73,6 @@ create-src-root-dir:
 copy-import-dir: clean-$(SRC_IMPORT_ROOT_DIR)
 	cp -r $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
 
-
-import-all: $(addprefix import-, $(DIRS))
-import-%: % copy-import-dir
-	# UTF-8 -> Shift_JIS and combine
-	Get-ChildItem -Recurse -Attributes !Directory $(SRC_IMPORT_ROOT_DIR)/$< | %{ nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite $$_.FullName }
-	cscript $(VBAC_EXE) combine /source:$(SRC_IMPORT_ROOT_DIR)/$< /binary:$<
-
-
-export-all: $(addprefix export-, $(DIRS))
-export-%: % create-src-root-dir clean-$(SRC_IMPORT_ROOT_DIR)
-	cscript $(VBAC_EXE) decombine /source:$(SRC_ROOT_DIR)/$< /binary:$<
-	# Shift_JIS -> UTF-8, CRLF -> LU
-	Get-ChildItem -Recurse -Attributes !Directory $(SRC_ROOT_DIR)/$< | %{ nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite $$_.FullName }
-
-unbind-%: %
-	cscript $(VBAC_EXE) clear /binary:$<
-unbind-all: $(addprefix unbind-, $(DIRS))
-
-XLSM_ABSPATH=$(abspath $(XLSM))
-XLSM_NAME=$(notdir $(XLSM))
-XLSM_PARENT_DIR=$(lastword $(subst /, ,$(dir $(abspath $(XLSM)))))
-XLSM_RELPATH=$(XLSM_PARENT_DIR)/$(XLSM_NAME)
-
 run:
 	cscript $(VBAC_EXE) run /binary:$(abspath $(XLSM))
 
@@ -86,6 +84,9 @@ export: create-src-root-dir clean-$(SRC_IMPORT_ROOT_DIR)
 import: copy-import-dir
 	Get-ChildItem -Recurse -Attributes !Directory $(SRC_IMPORT_ROOT_DIR)/$(XLSM_RELPATH)  | %{ nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite $$_.FullName }
 	cscript $(VBAC_EXE) combine /source:$(SRC_IMPORT_ROOT_DIR)/$(XLSM_PARENT_DIR) /binary:$(XLSM_ABSPATH)
+
+unbind:
+	cscript $(VBAC_EXE) clear /binary:$(abspath $(XLSM))
 
 
 # macOS or linux

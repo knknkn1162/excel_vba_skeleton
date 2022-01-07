@@ -38,23 +38,23 @@ choco install -y nkf
 ```sh
 unzip excelvba8.zip
 # import macro
-make import
-# make run-<dir>-<.xlsm file>
-make run-vba100-ex001.xlsm
-# run macros in directory
-make run-vba100 # or make run
-
-# in mac OS
-make run XLSM=<path_to_xlsm>
+make import XLSM=${XLSM_FILE}
+make run XLSM=${XLSM_FILE}
 ```
+
+Note) if you exec all files in directory(such as DirA), type `make import-DirA`.
 
 3. If you edit macro source, export it to text format automatically!
 
 ```sh
-make export
+make export XLSM=${XLSM_FILE}
 ```
 
 Note) If you clean macro source in your .xlsm, try `make unbind`:
+
+```sh
+make unbind XLSM=${XLSM_FILE}
+```
 
 ## directories
 
