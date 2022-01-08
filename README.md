@@ -56,6 +56,15 @@ make unbind XLSM=${XLSM_FILE}
 
 Note) If you run unimported macros, just `make import run XLSM=${XLSM_FILE}`.
 
+## tools
+
+```sh
+# copy template file
+make template XLSM=${XLSM_FILE}
+# git commit-push new macro, default: COMMIT_MSG=implement
+make push XLSM=${XLSM_FILE}
+```
+
 ## directories
 
 ```bash
