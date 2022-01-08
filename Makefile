@@ -18,6 +18,7 @@ XLSM_ABSPATH=$(abspath $(XLSM))
 XLSM_NAME=$(notdir $(XLSM))
 XLSM_PARENT_DIR=$(lastword $(subst /, ,$(dir $(abspath $(XLSM)))))
 XLSM_RELPATH=$(XLSM_PARENT_DIR)/$(XLSM_NAME)
+MACROS_DIR=$(SRC_ROOT_DIR)/$(XLSM_RELPATH)
 
 ENTRYPOINT=main
 
@@ -37,6 +38,7 @@ endif
 
 .PHONY: all imoprt export clean
 all: export
+
 ## run commands
 $(foreach dir, $(DIRS), \
 $(eval $(call define-vbac-commands,$(dir), run)) \
@@ -57,12 +59,22 @@ $(foreach dir, $(DIRS), \
 $(eval $(call define-vbac-commands,$(dir), unbind)) \
 )
 
+touch_module:
+	mkdir $(MACROS_DIR)
+	$(TOUCH) $(MACROS_DIR)/Module.bas
+
+push:
+	git push
+commit:
+	git add $(MACROS_DIR)
+	git commit -m "implement $(XLSM_RELPATH)"
 
 # OS dep. commands
 ifeq ("$(OS)", "Windows_NT")
 SHELL:=powershell.exe
 .SHELLFLAGS:= -NoProfile -Command
 RM=rm -r -fo
+TOUCH=New-Item -Type File
 ifeq (,$(wildcard $(SRC_ROOT_DIR)/))
 endif
 .PHONY: create-src-root-dir copy-import-dir
@@ -81,7 +93,7 @@ run:
 export: create-src-root-dir clean-$(SRC_IMPORT_ROOT_DIR)
 	if (-not ( Test-Path $(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) )) { mkdir $(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) }
 	cscript $(VBAC_EXE) decombine /source:$(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) /binary:$(XLSM_ABSPATH)
-	Get-ChildItem -Recurse -Attributes !Directory $(SRC_ROOT_DIR)/$(XLSM_RELPATH)  | %{ nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite $$_.FullName }
+	Get-ChildItem -Recurse -Attributes !Directory $(MACROS_DIR)  | %{ nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) -Lu --overwrite $$_.FullName }
 
 import: copy-import-dir
 	Get-ChildItem -Recurse -Attributes !Directory $(SRC_IMPORT_ROOT_DIR)/$(XLSM_RELPATH)  | %{ nkf --ic=$(THIS_ENCODING) --oc=$(VBA_ENCODING) --overwrite $$_.FullName }
@@ -95,6 +107,7 @@ unbind:
 else
 
 RM=rm -rf
+TOUCH=touch
 # Mac OS only
 ifeq ("$(shell uname)", "Darwin")
 run:
@@ -117,8 +130,8 @@ unbind:
 	./scripts/action_macos.scpt "unbind" $(HELPER_XLSM) $(XLSM_ABSPATH)
 
 export:
-	$(RM) $(SRC_ROOT_DIR)/$(XLSM_RELPATH)
-	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor /code/$(XLSM_RELPATH) --dst_dir /code/$(SRC_ROOT_DIR)/$(XLSM_RELPATH)
+	$(RM) $(MACROS_DIR)
+	docker run -it -v $(PWD):/code --rm knknkn1162/vba_extractor /code/$(XLSM_RELPATH) --dst_dir /code/$(MACROS_DIR)
 
 clean:
 	$(RM) $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
