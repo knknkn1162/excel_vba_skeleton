@@ -101,8 +101,18 @@ else
 run:
 	$(error "run command is not implemented")
 endif
-import:
-	$(error "import command is not implemented")
+
+HELPER_XLSM=$(abspath $(shell find $(CURDIR) -type f -name helper.xlsm))
+
+clean-$(SRC_IMPORT_ROOT_DIR):
+	$(RM) $(SRC_IMPORT_ROOT_DIR)
+import: clean-$(SRC_IMPORT_ROOT_DIR)
+	cp -r $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
+	find $(SRC_IMPORT_ROOT_DIR)/$(XLSM_RELPATH) -type f -print -exec nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) --overwrite {} \;
+	./scripts/action_macos.scpt "import" $(HELPER_XLSM) $(XLSM_ABSPATH) $(abspath $(SRC_IMPORT_ROOT_DIR)/$(XLSM_RELPATH))
+
+unbind:
+	./scripts/action_macos.scpt "unbind" $(HELPER_XLSM) $(XLSM_ABSPATH)
 
 export:
 	$(RM) $(SRC_ROOT_DIR)/$(XLSM_RELPATH)
