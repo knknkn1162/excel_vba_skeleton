@@ -9,9 +9,11 @@ Easy handling Excel VBA project.
 ||windows|MacOS|other|
 |---|---|---|---|
 |export|o|o|o|
-|import|o|x|x|
-|unbind macro|o|x|x|
+|import|o|o(\*1)|x|
+|unbind macro|o|o(\*1)|x|
 |run macro|o|o|x|
+
+(\*1): use ./scripts/tools.bas(VBA macro).
 
 ## Prerequisites
 
@@ -26,6 +28,11 @@ choco install docker-for-windows
 choco source add -n kai2nenobu -s https://www.myget.org/F/kai2nenobu
 choco install -y nkf
 ```
+
+### mac
+
++ install docker, nkf
++ import ./scripts/tools.bas to (empty) xlsm file manually and save as `helper.xlsm`.
 
 ## how to run excel macro
 
