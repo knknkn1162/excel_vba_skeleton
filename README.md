@@ -1,69 +1,61 @@
 # README
 
-Easy handling Excel VBA project.
+Easy handle Excel VBA macros.
 
 + [x] support Japanese code
++ [x] Windows support
++ [x] MacOS support
++ [] Backup
 
 ## OS features
 
-||windows|MacOS|other|
+||windows|MacOS|other(Linux)|
 |---|---|---|---|
 |export|o|o|o|
 |import|o|o(\*1)|x|
 |unbind macro|o|o(\*1)|x|
 |run macro|o|o|x|
 
-(\*1): use ./scripts/tools.bas(VBA macro).
+(\*1): use ./scripts/tools.bas(VBA macro). See also `Prerequisites > macOS` subsection.
 
 ## Prerequisites
 
 ### windows
 
-+ install docker, nkf
++ Powershell >= 2.1
++ Install docker, chocolatey, nkf, make
 
 ```ps
 # install nkf in Admin
 Start-Process powershell -Verb runAs
 choco install docker-for-windows
 choco source add -n kai2nenobu -s https://www.myget.org/F/kai2nenobu
-choco install -y nkf
+choco install -y nkf make
 ```
 
-### mac
+### macOS
 
-+ install docker, nkf
-+ import ./scripts/tools.bas to (empty) xlsm file manually and save as `helper.xlsm`.
++ Install docker, nkf, make
++ Import ./scripts/tools.bas to
++ Create (empty) xlsm file, import ./scripts/tools.bas manually. Save as `helper.xlsm`.
 
-## how to run excel macro
+# tutorial
 
-0. Fetch this repo; `git clone https://github.com/knknkn1162/excel_vba_playground`
-
-1. Download xlsm books in https://github.com/knknkn1162/excel_vba_playground/releases not containing VBA macro.
-
-2. Type commands below;
+Prepare xlsm file and set in `XLSM_FILE`. All you have to do is type `make <action> XLSM=${XLSM_FILE}`:
 
 ```sh
-unzip excelvba8.zip
+# unzip excelvba9.zip(in https://github.com/knknkn1162/excel_vba_playground/releases)
 # import macro
 make import XLSM=${XLSM_FILE}
 make run XLSM=${XLSM_FILE}
-# or you can set entrypoint
+# or you can set entrypoint(default: main)
 make run XLSM=${XLSM_FILE} ENTRYPOINT=test
-```
-
-Note) if you exec all files in directory(such as DirA), type `make import-DirA`.
-
-3. If you edit macro source, export it to text format automatically!
-
-```sh
 make export XLSM=${XLSM_FILE}
-```
-
-Note) If you clean macro source in your .xlsm, try `make unbind`:
-
-```sh
+# remove macros in the xlsm VBProject
 make unbind XLSM=${XLSM_FILE}
 ```
+
+Note) If you run unimported macros, just `make import run XLSM=${XLSM_FILE}`.
 
 ## directories
 
