@@ -59,15 +59,16 @@ $(foreach dir, $(DIRS), \
 $(eval $(call define-vbac-commands,$(dir), unbind)) \
 )
 
-touch_module:
-	mkdir $(MACROS_DIR)
-	$(TOUCH) $(MACROS_DIR)/Module.bas
+template:
+	-$(MKDIR) $(MACROS_DIR)
+	cp ./scripts/template.bas $(MACROS_DIR)/Module1.bas
 
-push:
+push: commit
 	git push
+COMMIT_MSG=implement
 commit:
 	git add $(MACROS_DIR)
-	git commit -m "implement $(XLSM_RELPATH)"
+	git commit -m "$(COMMIT_MSG) $(XLSM_RELPATH)"
 
 # OS dep. commands
 ifeq ("$(OS)", "Windows_NT")
@@ -75,6 +76,8 @@ SHELL:=powershell.exe
 .SHELLFLAGS:= -NoProfile -Command
 RM=rm -r -fo
 TOUCH=New-Item -Type File
+# see https://stackoverflow.com/a/47357220
+MKDIR=mkdir -ea 0
 ifeq (,$(wildcard $(SRC_ROOT_DIR)/))
 endif
 .PHONY: create-src-root-dir copy-import-dir
@@ -108,6 +111,7 @@ else
 
 RM=rm -rf
 TOUCH=touch
+MKDIR=mkdir -p
 # Mac OS only
 ifeq ("$(shell uname)", "Darwin")
 run:
