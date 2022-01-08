@@ -1,6 +1,6 @@
 # README
 
-Easy handle Excel VBA macros.
+Easy handling Excel VBA macros.
 
 + [x] support Japanese code
 + [x] Windows support
@@ -36,8 +36,7 @@ choco install -y nkf make
 ### macOS
 
 + Install docker, nkf, make
-+ Import ./scripts/tools.bas to
-+ Create (empty) xlsm file, import ./scripts/tools.bas manually. Save as `helper.xlsm`.
++ Create (empty) xlsm file and import ./scripts/tools.bas manually. Save as `helper.xlsm`.
 
 # tutorial
 
