@@ -46,9 +46,8 @@ Prepare xlsm file and set in `XLSM_FILE`. All you have to do is type `make <acti
 # unzip excelvba9.zip(in https://github.com/knknkn1162/excel_vba_playground/releases)
 # import macro
 make import XLSM=${XLSM_FILE}
+# run macro(you can set ENTRYPOINT[default: main])
 make run XLSM=${XLSM_FILE}
-# or you can set entrypoint(default: main)
-make run XLSM=${XLSM_FILE} ENTRYPOINT=test
 make export XLSM=${XLSM_FILE}
 # remove macros in the xlsm VBProject
 make unbind XLSM=${XLSM_FILE}
@@ -59,21 +58,25 @@ Note) If you run unimported macros, just `make import run XLSM=${XLSM_FILE}`.
 ## tools
 
 ```sh
-# copy template file
+# scaffold directory and macro according to ./scripts/template.bas
 make template XLSM=${XLSM_FILE}
-# git commit-push new macro, default: COMMIT_MSG=implement
+# git commit & push new macro, default: COMMIT_MSG=implement
 make push XLSM=${XLSM_FILE}
 ```
 
 ## directories
 
-```bash
-./excelvba1
-├── ex001.xlsm
+case) XLSM=./vba100/ex007
+
+```sh
+./scripts
+├── action_macos.scpt
+├── run_macro.scpt
+├── template.bas
+└── tools.bas
+./src/vba100/ex007.xlsm
+└── Module1.bas
+./vba100/
 └── ex007.xlsm
-./src/excelvba1
-├── ex001.xlsm
-│   └─ Module1.bas
-└── ex007.xlsm
-    └── Module1.bas
+./vbac/vbac.wsf
 ```
