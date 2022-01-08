@@ -19,6 +19,8 @@ XLSM_NAME=$(notdir $(XLSM))
 XLSM_PARENT_DIR=$(lastword $(subst /, ,$(dir $(abspath $(XLSM)))))
 XLSM_RELPATH=$(XLSM_PARENT_DIR)/$(XLSM_NAME)
 
+ENTRYPOINT=main
+
 # define macro
 ifeq ("$(OS)", "Windows_NT")
 
@@ -74,7 +76,7 @@ copy-import-dir: clean-$(SRC_IMPORT_ROOT_DIR)
 	cp -r $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
 
 run:
-	cscript $(VBAC_EXE) run /binary:$(abspath $(XLSM))
+	cscript $(VBAC_EXE) run /binary:$(abspath $(XLSM)) /entrypoint:$(ENTRYPOINT)
 
 export: create-src-root-dir clean-$(SRC_IMPORT_ROOT_DIR)
 	if (-not ( Test-Path $(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) )) { mkdir $(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) }
@@ -96,7 +98,7 @@ RM=rm -rf
 # Mac OS only
 ifeq ("$(shell uname)", "Darwin")
 run:
-	./scripts/run_macro.scpt $(XLSM_ABSPATH)
+	./scripts/run_macro.scpt $(XLSM_ABSPATH) $(ENTRYPOINT)
 else
 run:
 	$(error "run command is not implemented")

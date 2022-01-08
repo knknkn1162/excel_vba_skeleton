@@ -47,6 +47,8 @@ unzip excelvba8.zip
 # import macro
 make import XLSM=${XLSM_FILE}
 make run XLSM=${XLSM_FILE}
+# or you can set entrypoint
+make run XLSM=${XLSM_FILE} ENTRYPOINT=test
 ```
 
 Note) if you exec all files in directory(such as DirA), type `make import-DirA`.
