@@ -8,6 +8,7 @@ Sub main()
         End If
         If rng.MergeCells Then
             rng.AddComment "セル結合されています"
+            ' rng must be the head of merged Cells
             rng.Comment.Visible = True
         End If
 Continue:
