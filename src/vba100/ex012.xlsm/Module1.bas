@@ -14,7 +14,9 @@ Sub main()
         Dim m As Long
         m = rng.Value Mod unit.CountLarge
         unit.Value = value
-        unit.Resize(m).Value = value + 1
+        If m <> 0 Then
+            unit.Resize(m).Value = value + 1
+        End If
 Continue:
     Next
 End Sub
