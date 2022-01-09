@@ -1,9 +1,10 @@
 Option Explicit
 
 Sub main()
-    Dim flag As Variant
-    flag = Range("A1").CurrentRegion.MergeCells 
-    If isNull(flag) Or flag = True Then
-        Msgbox "セル結合されています"
-    End If
+    Dim rng As Range
+    For Each rng In Range("A1").CurrentRegion
+        If rng.MergeCells Then
+            rng.AddComment = "セル結合されています"
+        End If
+    Next
 End Sub
