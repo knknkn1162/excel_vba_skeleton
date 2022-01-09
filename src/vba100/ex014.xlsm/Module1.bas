@@ -9,15 +9,20 @@ Sub main()
             Set rng = InterSect(.Cells, .SpecialCells(xlCellTypeFormulas))
             Err.Clear
         End With
+        If rng Is Nothing Then
+            Exit For
+        End If
         Dim r As Range
-        For each r In rng
+        For each r In rng.Areas 
             r.Value = r.Value
         Next
     Next
 
-    For Each ws In WorkSheets
+    ' including Graph
+    For Each ws In Sheets
         If Instr(ws.Name, "社外秘") <> 0 Then
             Application.DisplayAlerts = false
+            ws.Visible = xlSheetVisible
             ws.Delete
             Application.DisplayAlerts = true
         End If
