@@ -28,6 +28,7 @@ End Sub
 
 Sub main2()
     Dim target As Range, c As Range
+    ' SpecialCellsメソッドは、指定に一致するセルが存在しない場合はエラーとなります。
     On Error Resume Next
     Set target = Intersect(Selection, Selection.SpecialCells(xlCellTypeConstants, xlTextValues))
     Err.Clear
