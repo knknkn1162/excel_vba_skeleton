@@ -24,5 +24,30 @@ Sub main()
         Loop
         Set c = Cells.FindNext(c)
     Loop Until c.Address = srng.Address
-
 End Sub
+
+Sub main2()
+    Dim target As Range, c As Range
+    On Error Resume Next
+    Set target = Intersect(Selection, Selection.SpecialCells(xlCellTypeConstants, xlTextValues))
+    Err.Clear
+    If target Is Nothing Then
+        Exit Sub
+    End If
+    For Each c In target
+        Dim pos As Long
+        pos = 1
+        Do While True
+            pos = Instr(pos, c.Value, "注意")
+            If pos = 0 Then
+                Exit Do
+            End If
+            With c.Characters(pos, 2).Font
+                .Color = vbRed
+                .Bold = True
+            End With
+            pos = pos + 2
+        Loop
+    Next
+End Sub
+
