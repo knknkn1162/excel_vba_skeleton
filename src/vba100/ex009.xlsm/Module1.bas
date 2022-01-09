@@ -11,19 +11,13 @@ Sub main()
     Application.DisplayAlerts = True
 
     Dim dst_ws As Worksheet
-    Set dst_ws = Worksheets.Add
-    With dst_ws
-        dst_ws.Name = "合格者"
-    End With
+    Set dst_ws = Worksheets.Add(After:=ws)
+    dst_ws.Name = "合格者"
 
-    Dim i As Integer, pos As Integer
-    pos = 1
-    With ws
-        For i = 2 To .Cells(Rows.Count, 1).End(xlUp).Row
-            If .Cells(i,7) = "合格" Then
-                dst_ws.Cells(pos, 1) = .Cells(i, 1)
-                pos = pos + 1
-            End If
-        Next
+    ws.AutoFilterMode = False
+    With ws.Range("A1").CurrentRegion
+        .AutoFilter Field:=7, Criteria1:="合格"
+        .Columns(1).Copy dst_ws.Range("A1")
     End With
+    ws.AutoFilterMode = False
 End Sub
