@@ -30,3 +30,19 @@ Sub main()
         End If
     Next
 End Sub
+
+Sub main2()
+    Dim master_ws As WorkSheet, dst_ws As WorkSheet
+    Set master_ws = Worksheets("社員")
+    Set dst_ws = Worksheets("部・課マスタ")
+    Dim rng As Range
+    master_ws.Columns("C:F").AdvancedFilter Action:=xlFilterCopy, _
+        CopyToRange:=dst_ws.Range("A1"), _
+        Unique:=True
+
+    With dst_ws
+        .Range("A1").CurrentRegion.Sort _
+            key1:=.Range("B1"), order2:=xlAscending, Header:=xlYes
+    End With
+    
+End Sub
