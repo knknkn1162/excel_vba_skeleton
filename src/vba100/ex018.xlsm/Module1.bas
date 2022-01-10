@@ -10,7 +10,7 @@ Sub main()
         n.Visible = True
         Debug.Print "Name: " & n.Name & ", RefersTo: " & n.RefersTo
         ' Escape with [<character>]
-        If n.RefersTo Like "*[#]REF[!]*" Then
+        If n.RefersTo Like "*[#]REF!*" Then
             deleteCnt = deleteCnt + 1
             n.Delete
         End If
