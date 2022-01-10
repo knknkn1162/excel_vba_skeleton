@@ -42,7 +42,7 @@ Sub main2()
 
     With dst_ws
         .Range("A1").CurrentRegion.Sort _
-            key1:= .Range("B1"), order2:=xlAscending, _
+            key1:= .Range("A1"), order2:=xlAscending, _
             key2:= .Range("B1"), order2:=xlAscending, _
             Header:=xlYes
     End With
