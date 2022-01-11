@@ -31,6 +31,7 @@ Sub main()
         .Close SaveChanges:=False
     End With
     If cnt1 <> cnt2 Then
+        Msgbox "不一致"
         Exit Sub
     End If
 
