@@ -12,6 +12,7 @@ Sub main()
     Dim ws As Worksheet
     Dim i As Integer
     i = 1
+    Application.ScreenUpdating = False
     With Workbooks.Open(root & "/ex023/" & str1)
         cnt1 = .Worksheets.Count
         For each ws In .Worksheets
@@ -19,9 +20,11 @@ Sub main()
             i = i + 1
         Next
         .Close SaveChanges:=False
+        Application.ScreenUpdating = True
     End With
 
     i = 1
+    Application.ScreenUpdating = False
     With Workbooks.Open(root & "/ex023/" & str2)
         cnt2 = .Worksheets.Count
         For each ws In .Worksheets
@@ -29,6 +32,7 @@ Sub main()
             i = i + 1
         Next
         .Close SaveChanges:=False
+        Application.ScreenUpdating = True
     End With
     If cnt1 <> cnt2 Then
         Msgbox "不一致"
