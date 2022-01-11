@@ -10,7 +10,7 @@ Sub main()
         Set rng = Intersect(.Cells, .Offset(, 2))
     End With
     ' Copy
-    dst_ws.Range("A1").Value = rng.Value
+    rng.Copy Destination:= dst_ws.Range("A1")
 
     With dst_ws.Range("A1").CurrentRegion
         Set rng = Intersect(.Cells, .Offset(1))
