@@ -32,11 +32,10 @@ Sub main2()
         tmp = Mid(str, i, 1)
         Select Case tmp
             Case StrConv("A", vbWide) To StrConv("Z", vbWide)
-                tmp = StrConv(tmp, vbNarrow)
+                Mid(str, i, 1) = StrConv(tmp, vbNarrow)
             Case StrConv("0", vbWide) To StrConv("9", vbWide)
-                tmp = StrConv(tmp, vbNarrow)
+                Mid(str, i, 1) = StrConv(tmp, vbNarrow)
         End Select
-        ans = ans & tmp
     Next
-    Range("A1") = ans
+    Range("A1") = str
 End Sub
