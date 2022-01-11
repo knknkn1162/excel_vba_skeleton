@@ -59,9 +59,9 @@ $(foreach dir, $(DIRS), \
 $(eval $(call define-vbac-commands,$(dir), unbind)) \
 )
 
-template:
+template: create-xlsm-template
 	-$(MKDIR) $(MACROS_DIR)
-	cp ./scripts/template.bas $(MACROS_DIR)/Module1.bas
+	cp ./templates/template.bas $(MACROS_DIR)/Module1.bas
 
 push: commit
 	git push
@@ -89,6 +89,8 @@ create-src-root-dir:
 	if ( -not (Test-Path $(SRC_ROOT_DIR)) ) { mkdir $(SRC_ROOT_DIR) }
 copy-import-dir: clean-$(SRC_IMPORT_ROOT_DIR)
 	cp -r $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
+create-xlsm-template:
+	if ( -not (Test-Path $(XLSM_ABSPATH))) { cp ./templates/empty.xlsm $(XLSM_ABSPATH) }
 
 run:
 	cscript $(VBAC_EXE) run /binary:$(abspath $(XLSM)) /entrypoint:$(ENTRYPOINT)
@@ -125,6 +127,9 @@ HELPER_XLSM=$(abspath $(shell find $(CURDIR) -type f -name helper.xlsm))
 
 clean-$(SRC_IMPORT_ROOT_DIR):
 	$(RM) $(SRC_IMPORT_ROOT_DIR)
+create-xlsm-template:
+	cp --no-clobber ./templates/empty.xlsm $(XLSM_ABSPATH)
+
 import: clean-$(SRC_IMPORT_ROOT_DIR)
 	cp -r $(SRC_ROOT_DIR) $(SRC_IMPORT_ROOT_DIR)
 	find $(SRC_IMPORT_ROOT_DIR)/$(XLSM_RELPATH) -type f -print -exec nkf --ic=$(VBA_ENCODING) --oc=$(THIS_ENCODING) --overwrite {} \;
