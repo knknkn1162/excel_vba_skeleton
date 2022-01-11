@@ -23,7 +23,7 @@ Sub main()
 
     i = 1
     With Workbooks.Open(root & "/ex023/" & str2)
-        cur2 = .Worksheets.Count
+        cnt2 = .Worksheets.Count
         For each ws In .Worksheets
             cur_ws.Cells(i, 2) = ws.Name
             i = i + 1
