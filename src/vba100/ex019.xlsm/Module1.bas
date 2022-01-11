@@ -11,6 +11,7 @@ Sub main()
         If sp.Name = "checked" Then
             GoTo Continue
         End If
+        sp.Name = "checked"
         With sp.Duplicate
             .left = sp.left + sp.width
             .top = sp.top
