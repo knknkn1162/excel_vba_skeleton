@@ -42,4 +42,5 @@ Sub main()
         pos = pos + 1
         fname = Dir()
     Loop
+    ws.UsedRange.EntireColumn.AutoFit
 End Sub
