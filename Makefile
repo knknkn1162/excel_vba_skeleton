@@ -93,7 +93,7 @@ create-xlsm-template:
 	if ( -not (Test-Path $(XLSM_ABSPATH))) { cp ./templates/empty.xlsm $(XLSM_ABSPATH) }
 
 run:
-	cscript $(VBAC_EXE) run /binary:$(abspath $(XLSM)) /entrypoint:$(ENTRYPOINT)
+	try { cscript $(VBAC_EXE) run /binary:$(abspath $(XLSM)) /entrypoint:$(ENTRYPOINT) } finally { Stop-Process -Name EXCEL }
 
 export: create-src-root-dir clean-$(SRC_IMPORT_ROOT_DIR)
 	if (-not ( Test-Path $(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) )) { mkdir $(SRC_ROOT_DIR)/$(XLSM_PARENT_DIR) }
