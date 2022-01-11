@@ -20,3 +20,23 @@ Sub main()
     Range("A1") = "あいうＡＢＣアイウａｂｃ１２３"
     Range("A1") = changeStr(Range("A1"))
 End Sub
+
+Sub main2()
+    Dim i As Integer, tmp As String
+    Dim str As String
+    str = "あいうＡＢＣアイウａｂｃ１２３"
+    str = UCase(str)
+    Dim ans As String
+    ans = ""
+    For i = 1 To Len(str)
+        tmp = Mid(str, i, 1)
+        Select Case tmp
+            Case StrConv("A", vbWide) To StrConv("Z", vbWide)
+                tmp = StrConv(tmp, vbNarrow)
+            Case StrConv("0", vbWide) To StrConv("9", vbWide)
+                tmp = StrConv(tmp, vbNarrow)
+        End Select
+        ans = ans & tmp
+    Next
+    Range("A1") = ans
+End Sub
