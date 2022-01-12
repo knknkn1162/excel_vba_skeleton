@@ -1,0 +1,31 @@
+Option Explicit
+
+Sub main()
+    Dim rng As Range
+    Set rng = Selection
+    Dim d As String
+    d = inputbox("画像のpath選択")
+    Dim root As String: root = ThisWorkbook.Path
+    Dim fpath As String
+    fpath = root & "/" & d
+    Dim shp As Shape
+    Set shp = Activesheet.Shapes.AddPicture( _
+        FileName := fpath, _
+        LinkToFile := False, _
+        SaveWithDocument := True, _
+        Left := rng.Left, _
+        Top := rng.Top, _
+        Width:=0, Height:=0)
+    shp.ScaleHeight 1, msoTrue
+    shp.ScaleWidth 1, msoTrue
+
+    Dim ratio As Double
+    ratio = WorksheetFunction.Min( _
+        rng.Width / shp.Width, _
+        rng.Height / shp.Height _
+    )
+    shp.Width = shp.Width * ratio
+    shp.Height = shp.Height * ratio
+    shp.Left = shp.Left + (rng.Width-shp.Width)/2
+    shp.Top = shp.Top + (rng.Height-shp.Height)/2
+End Sub
