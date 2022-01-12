@@ -92,7 +92,7 @@ copy-import-dir: clean-$(SRC_IMPORT_ROOT_DIR)
 create-xlsm-template:
 	if ( -not (Test-Path $(XLSM_ABSPATH))) { cp ./templates/empty.xlsm $(XLSM_ABSPATH) }
 
-# (try-)finally statement supports Ctrl-C in powershell. Whenever something error occurs in Excel Application, we can shutdown it by Ctrl-C.
+# (try-)finally statement supports Ctrl-C in powershell. Whenever something error occurs in Excel Application, Ctrl-C can do cancellation and shutdown.
 run:
 	try { cscript $(VBAC_EXE) run /binary:$(abspath $(XLSM)) /entrypoint:$(ENTRYPOINT) } finally { Stop-Process -Name EXCEL }
 
