@@ -12,6 +12,7 @@ Sub main()
         Dim rng As Range
         Set rng = link.Range
         rng.offset(,1) = link.Address
+        link.Delete
 Continue:
     Next
 End Sub
