@@ -15,11 +15,9 @@ Sub main()
         SaveWithDocument := True, _
         Left := rng.Left, _
         Top := rng.Top, _
-        Width:=0, Height:=0)
+        Width:=-1, Height:=-1)
     shp.LockAspectRatio = msoTrue
     'shp.Placement = xlMoveAndSize
-    shp.ScaleHeight 1, msoTrue
-    shp.ScaleWidth 1, msoTrue
 
     Dim ratio As Double
     shp.Width = WorksheetFunction.min(rng.Width, shp.Width)
