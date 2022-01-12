@@ -16,16 +16,14 @@ Sub main()
         Left := rng.Left, _
         Top := rng.Top, _
         Width:=0, Height:=0)
+    shp.LockAspectRatio = msoTrue
+    'shp.Placement = xlMoveAndSize
     shp.ScaleHeight 1, msoTrue
     shp.ScaleWidth 1, msoTrue
 
     Dim ratio As Double
-    ratio = WorksheetFunction.Min( _
-        rng.Width / shp.Width, _
-        rng.Height / shp.Height _
-    )
-    shp.Width = shp.Width * ratio
-    shp.Height = shp.Height * ratio
+    shp.Width = WorksheetFunction.min(rng.Width, shp.Width)
+    shp.Height = WorksheetFunction.min(rng.Height, shp.Height)
     shp.Left = shp.Left + (rng.Width-shp.Width)/2
     shp.Top = shp.Top + (rng.Height-shp.Height)/2
 End Sub
