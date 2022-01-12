@@ -8,7 +8,8 @@ Sub main()
     Dim d As String
     ' Remove old
     For Each ws In Worksheets
-        busyo = Left(ws.Name, Instr(ws.Name, "_")-1)
+        ws.Visible = xlSheetVisible
+        busyo = Split(ws.Name, "_")(0)
         d = root & "/" & busyo
         ' フォルダ内にファイルが残っている場合はエラーとなります。
         If Dir(d, vbDirectory) <> "" Then
@@ -19,10 +20,7 @@ Sub main()
 
     ' create
     For Each ws In Worksheets
-        Dim pos As Integer
-        pos = Instr(ws.Name, "_")
-        busyo = Left(ws.Name, pos-1)
-        namae = Right(ws.Name, pos+1)
+        busyo = Split(ws.Name, "_")(0)
         d = root & "/" & busyo
         If Dir(d, vbDirectory) = "" Then
             MkDir(d)
