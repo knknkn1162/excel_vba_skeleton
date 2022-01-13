@@ -28,7 +28,8 @@ Function formatMatrix(mat As Variant) As String
         Next
         str = str & vbLf
     Next
-    formatMatrix = Instr(str, Len(str)-1)
+    ' remove comma and vbLf
+    formatMatrix = Left(str, Len(str)-2)
 End Function
 
 Sub main()
