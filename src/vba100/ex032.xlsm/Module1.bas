@@ -10,17 +10,9 @@ Sub main()
     fnumber = FreeFile
     Open txtPath For Output As #fnumber
     For each wb In Workbooks
-        ' ThisWorkbook closes lastly
-        If wb.Name = cur_wb.Name Then
-            GoTo Continue
-        End If
-        Msgbox wb.Name
+        ' wb.Save
         Print #fnumber, cur_wb.Path & "/" & wb.Name
-        wb.Close saveChanges:=False
-Continue:
     Next
-    Print #fnumber, cur_wb.Path & "/" & cur_wb.Name
     Close #fnumber
-    cur_wb.Close saveChanges:=False
     Application.Quit
 End Sub
