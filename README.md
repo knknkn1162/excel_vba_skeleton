@@ -64,19 +64,6 @@ make template XLSM=${XLSM_FILE}
 make push XLSM=${XLSM_FILE}
 ```
 
-## directories
+# sample
 
-case) XLSM=./vba100/ex007
-
-```sh
-./scripts
-├── action_macos.scpt
-├── run_macro.scpt
-├── template.bas
-└── tools.bas
-./src/ex007
-└── Module1.bas
-./vba100/
-└── ex007.xlsm
-./vbac/vbac.wsf
-```
++ [knknkn1162/vba100_knock](https://github.com/knknkn1162/vba100_knock)
