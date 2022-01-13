@@ -23,12 +23,11 @@ Easy handling Excel VBA macros.
 ### windows
 
 + Powershell >= 2.1
-+ Install docker, chocolatey, nkf, make
++ Install chocolatey, nkf, make
 
 ```ps
-# install nkf in Admin
+# install commands in Admin
 Start-Process powershell -Verb runAs
-choco install docker-for-windows
 choco source add -n kai2nenobu -s https://www.myget.org/F/kai2nenobu
 choco install -y nkf make
 ```
