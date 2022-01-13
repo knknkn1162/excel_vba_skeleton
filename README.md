@@ -74,7 +74,7 @@ case) XLSM=./vba100/ex007
 ├── run_macro.scpt
 ├── template.bas
 └── tools.bas
-./src/vba100/ex007.xlsm
+./src/ex007
 └── Module1.bas
 ./vba100/
 └── ex007.xlsm
