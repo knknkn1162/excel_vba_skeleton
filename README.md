@@ -5,7 +5,7 @@ Easy handling Excel VBA macros.
 + [x] support Japanese code
 + [x] Windows support
 + [x] MacOS support
-+ [] Backup
++ [x] run from Powershell/bash
 
 ## OS features
 
