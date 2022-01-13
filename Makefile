@@ -1,7 +1,3 @@
-XLSMS=$(filter-out $(wildcard */~*.xlsm), \
-	  $(foreach dir, $(DIRS), $(wildcard $(dir)/*.xlsm)) \
-)
-TARGETS=$(basename $(XLSMS))
 SRC_ROOT_DIR=src
 BOOKS_DIR=books
 # used for nkf command
@@ -18,6 +14,7 @@ XLSM_RELPATH=$(BOOKS_DIR)/$(XLSM_NAME)
 XLSM_ABSPATH=$(abspath $(XLSM_RELPATH))
 MACROS_DIR=$(abspath $(SRC_ROOT_DIR)/$(XLSM_BASENAME))
 ENCODING_MACROS_DIR=$(abspath $(SRC_IMPORT_ROOT_DIR)/$(XLSM_BASENAME))
+TARGETS=$(basename $(notdir $(wildcard $(BOOKS_DIR)/*.xlsm)))
 
 ENTRYPOINT=main
 
@@ -27,7 +24,7 @@ ifeq ("$(OS)", "Windows_NT")
 define define-vbac-commands
 $(1)-%: $(BOOKS_DIR)/%.xlsm
 	make $(1) XLSM=$(notdir $$*)
-all-$(1): $(addprefix $(1)-, $(basename $(notdir $(wildcard $(BOOKS_DIR)/*.xlsm))))
+$(1)-all: $(addprefix $(1)-, $(TARGETS))
 endef
 
 else
