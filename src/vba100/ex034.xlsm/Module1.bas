@@ -1,6 +1,6 @@
 Option Explicit
 
-Function transpose(mat As Variant, w As Boolean) As Variant
+Function transpose(ByRef mat As Variant, ByVal w As Boolean) As Variant
     Dim arr2() As Variant
     Dim r,c As Integer
     r = UBound(mat, 1): c = UBound(mat, 2)
@@ -18,7 +18,7 @@ Function transpose(mat As Variant, w As Boolean) As Variant
     transpose = arr2
 End Function
 
-Function formatMatrix(mat As Variant) As String
+Function formatMatrix(ByRef mat As Variant) As String
     Dim str As String
     str = ""
     Dim i As Integer, j As Integer
