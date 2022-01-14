@@ -6,6 +6,7 @@ Easy handling Excel VBA macros.
 + [x] Windows support
 + [x] MacOS support
 + [x] run from Powershell/bash
++ [x] capture before/after running macro as pdf/png file
 
 ## OS features
 
@@ -24,12 +25,19 @@ Easy handling Excel VBA macros.
 
 + Powershell >= 2.1
 + Install chocolatey, nkf, make
++ (Optional) ghostscript, imagemagick.app
 
 ```ps
 # install commands in Admin
 Start-Process powershell -Verb runAs
 choco source add -n kai2nenobu -s https://www.myget.org/F/kai2nenobu
 choco install -y nkf make
+
+# (Optional) when capture
+Start-Process powershell -Verb runAs
+choco install -y imagemagick.app ghostscript
+## specify version
+$ENV:Path="C:\Program Files\ImageMagick-${version};"+$ENV:Path
 ```
 
 ### macOS
@@ -54,13 +62,27 @@ make unbind XLSM=${XLSM_FILE}
 
 Note) If you run unimported macros, just `make import run XLSM=${XLSM_FILE}`.
 
-## tools
+# other features
+
+## template
 
 ```sh
 # scaffold directory and macro according to ./scripts/template.bas
 make template XLSM=${XLSM_FILE}
+```
+
+## git commit/push
+
+```sh
 # git commit & push new macro, default: COMMIT_MSG=implement
 make push XLSM=${XLSM_FILE}
+```
+
+## capture after/before running macro
+
+```sh
+# export Sheet as PDF file and convert it to .png
+make run XLSM=${XLSM_FILE} CAP_DIR=./img
 ```
 
 # sample
