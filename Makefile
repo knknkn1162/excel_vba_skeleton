@@ -54,12 +54,11 @@ template: create-xlsm-template
 	-$(MKDIR) $(MACROS_DIR)
 	cp ./templates/template.bas $(MACROS_DIR)/Module1.bas
 
-push: commit
-	git push
+push:
+	make push -C $(SRC_ROOT_DIR)
 COMMIT_MSG=implement
 commit:
-	git add $(MACROS_DIR)
-	git commit -m "$(COMMIT_MSG) $(XLSM_NAME)"
+	make -C $(SRC_ROOT_DIR) XLSM=$(XLSM) COMMIT_MSG=$(COMMIT_MSG)
 
 pdftopng: $(patsubst %.pdf, %.png, $(wildcard $(CAP_PATH)/*.pdf))
 %.png: %.pdf
