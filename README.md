@@ -60,6 +60,8 @@ make export XLSM=${XLSM_FILE}
 make unbind XLSM=${XLSM_FILE}
 ```
 
+For more information, see also [Wiki](https://github.com/knknkn1162/excel_vba_skeleton/wiki).
+
 Note) If you run unimported macros, just `make import run XLSM=${XLSM_FILE}`.
 
 # other features
