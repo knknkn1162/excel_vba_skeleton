@@ -55,8 +55,7 @@ template: create-xlsm-template
 	cp ./templates/template.bas $(MACROS_DIR)/Module1.bas
 
 push:
-	make push -C $(SRC_ROOT_DIR)
-COMMIT_MSG=implement
+	make push -C $(SRC_ROOT_DIR) XLSM=$(XLSM) COMMIT_MSG=$(COMMIT_MSG)
 commit:
 	make -C $(SRC_ROOT_DIR) XLSM=$(XLSM) COMMIT_MSG=$(COMMIT_MSG)
 
