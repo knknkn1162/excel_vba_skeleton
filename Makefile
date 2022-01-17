@@ -55,9 +55,9 @@ template: create-xlsm-template
 	cp ./templates/template.bas $(MACROS_DIR)/Module1.bas
 
 push:
-	make push -C $(SRC_ROOT_DIR) XLSM=$(XLSM) COMMIT_MSG=$(COMMIT_MSG)
+	make push -C $(SRC_ROOT_DIR) XLSM=$(XLSM) COMMIT_MSG="$(COMMIT_MSG)"
 commit:
-	make -C $(SRC_ROOT_DIR) XLSM=$(XLSM) COMMIT_MSG=$(COMMIT_MSG)
+	make -C $(SRC_ROOT_DIR) XLSM=$(XLSM) COMMIT_MSG="$(COMMIT_MSG)"
 
 pdftopng: $(patsubst %.pdf, %.png, $(wildcard $(CAP_PATH)/*.pdf))
 %.png: %.pdf
