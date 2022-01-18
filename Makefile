@@ -24,6 +24,12 @@ TARGETS=$(basename $(notdir $(wildcard $(BOOKS_DIR)/*.xlsm)))
 
 ENTRYPOINT=main
 
+DEBUG=1
+DEBUG_OPTION=-debug
+ifeq ($(DEBUG), 0)
+	DEBUG_OPTION=
+endif
+
 # define macro
 ifeq ("$(OS)", "Windows_NT")
 
@@ -96,7 +102,7 @@ create-cap-dir:
 
 # (try-)finally statement supports Ctrl-C in powershell. Whenever something error occurs in Excel Application, Ctrl-C can do cancellation and shutdown.
 run-macro: $(CAP_TARGET)
-	try { cscript $(VBAC_EXE) run /binary:$(XLSM_ABSPATH) /entrypoint:$(ENTRYPOINT) $(CAP_OPTION) } finally { Stop-Process -Name EXCEL }
+	try { cscript $(VBAC_EXE) run /binary:$(XLSM_ABSPATH) /entrypoint:$(ENTRYPOINT) $(DEBUG_OPTION) $(CAP_OPTION) } finally { Stop-Process -Name EXCEL }
 
 export: clean-$(SRC_IMPORT_ROOT_DIR)
 	if (-not ( Test-Path $(MACROS_DIR) )) { mkdir $(MACROS_DIR) }
