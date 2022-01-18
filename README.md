@@ -23,7 +23,7 @@ Easy handling Excel VBA macros.
 
 ### windows
 
-+ Powershell >= 2.1
++ Powershell >= 5.1
 + Install chocolatey, nkf, make
 + (Optional) ghostscript, imagemagick.app
 
